@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.GurnDAO">
+    <select id="queryAll" resultType="Gurn">
+        select id,name,law_name,headPic,state,date,sex from gurn
+    </select>
+    <!--分页查询上师表-->
+    <select id="queryAllPage" resultType="Gurn">
+        select id,name,law_name,headPic,state,date,sex from gurn limit #{start},#{rows}
+    </select>
+    <!--查询上师表的总条数-->
+    <select id="quertPage" resultType="Long">
+        select count(id) from gurn
+    </select>
+    <!--增加上师-->
+    <insert id="insert">
+        insert into gurn values(#{id},#{name},#{law_name},#{headPic},#{state},#{date},#{sex})
+    </insert>
+    <!--根据id删除上师-->
+    <delete id="delete">
+        delete from gurn where id=#{id}
+    </delete>
+    <!--批量删除上师-->
+    <delete id="deleteAll">
+        delete from gurn where id in
+        <foreach collection="array" open="(" item="item"  separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <!--修改上师状态-->
+    <update id="update">
+        update gurn set name=#{name},law_name=#{law_name},headPic=#{headPic},state=#{state},date=#{date},sex=#{sex} where id=#{id}
+    </update>
+    <!--根据id查询上师-->
+    <select id="queryById" resultType="Gurn">
+        select id,name,law_name,headPic,state,date,sex from gurn where id=#{id}
+    </select>
+</mapper>

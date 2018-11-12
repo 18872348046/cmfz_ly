@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.CourseDAO">
+    <!--查询必修功课-->
+    <select id="queryAll" resultType="Course">
+        select id,title,foundDate  from course where flag='b'
+    </select>
+    <!--根据id删除必修功课-->
+   <delete id="delete">
+       delete from course where id=#{id}
+   </delete>
+    <!--增加必修功课-->
+    <insert id="insert">
+        insert into course values(#{id},#{title},#{foundDate},#{flag})
+    </insert>
+</mapper>

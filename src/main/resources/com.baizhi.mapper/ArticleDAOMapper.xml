@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.ArticleDAO">
+   <!--甘露妙宝文章查询-->
+    <resultMap id="resultArticle" type="Article">
+        <id property="id" column="a_id"/>
+        <result property="title" column="title"/>
+        <result property="date" column="date"/>
+        <result property="imgPath" column="imgPath"/>
+        <result property="content" column="content"/>
+        <result property="guru_id" column="guru_id"/>
+        <result property="status" column="status"/>
+        <result property="classift" column="classift"/>
+        <association property="gurn" javaType="Gurn">
+            <id property="id" column="g_id"></id>
+            <result property="name" column="name"/>
+            <result property="law_name" column="law_name"/>
+            <result property="headPic" column="headPic"/>
+            <result property="state" column="state"/>
+            <result property="date" column="g_date"/>
+            <result property="sex" column="sex"/>
+        </association>
+    </resultMap>
+    <select id="queryAllPageArticle" resultMap="resultArticle">
+        select a.id as a_id,a.title,a.date,a.imgPath,a.content,a.status,a.classift,g.id as g_id,g.name,g.law_name,g.headPic,g.state,g.date as g_date,g.sex
+        from article a
+        inner join gurn g
+        on a.gurn_id=g.id
+        where classift=#{classift}
+        limit #{start},#{rows}
+    </select>
+    <!--查询总条数-->
+    <select id="quertPageArticle" resultType="Long">
+       select count(id) from article where classift=#{classift}
+    </select>
+    <!--增加文章-->
+    <insert id="insert">
+        insert into article values(#{id},#{title},#{date},#{imgPath},#{content},#{gurn.id},#{status},#{classift})
+    </insert>
+    <!--根据id删除文章-->
+    <delete id="delete">
+        delete from article where id=#{id}
+    </delete>
+    <!--根据id查询文章-->
+        <select id="queryById" resultMap="resultArticle">
+        select a.id as a_id,a.title,a.date,a.imgPath,a.content,a.status,a.classift,g.id as g_id,g.name,g.law_name,g.headPic,g.state,g.date as g_date,g.sex
+        from article a
+        inner join gurn g
+        on a.gurn_id=g.id
+        where a.id=#{id}
+    </select>
+    <!--修改文章的状态-->
+    <update id="update">
+        update article set title=#{title},date=#{date},imgPath=#{imgPath},content=#{content},gurn_id=#{gurn.id},status=#{status},classift=#{classift} where id=#{id}
+    </update>
+    <!--批量删除文章-->
+    <delete id="deleteAll">
+        delete from article where id in
+        <foreach collection="array" open="(" item="item" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

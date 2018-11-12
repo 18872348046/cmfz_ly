@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.AlbumDAO">
+    <!--查询专辑-->
+    <resultMap id="resultAlbum" type="Album">
+        <id property="id" column="a_id" />
+        <result property="title" column="a_title"/>
+        <result property="publishDate" column="publishDate"/>
+        <result property="count" column="count"/>
+        <result property="author" column="author"/>
+        <result property="coverImg" column="coverImg"/>
+        <result property="broadCast" column="broadCast"/>
+        <result property="star" column="star"/>
+        <result property="brief" column="brief"/>
+        <collection property="children" ofType="Chapter">
+            <id property="id" column="c_id" />
+            <result property="title" column="c_title"/>
+            <result property="path" column="path"/>
+            <result property="size" column="size"/>
+            <result property="foundDate" column="foundDate"/>
+            <result property="duration" column="duration"/>
+        </collection>
+
+    </resultMap>
+    <select id="queryAllPage" resultMap="resultAlbum">
+        select a.id as a_id,a.title as a_title,a.publishDate,a.count,a.author,a.coverImg,a.broadCast,a.star,a.brief,c.id as c_id,c.title as c_title,c.path,c.size,c.foundDate,c.duration
+        from album a
+        right outer join chapter c
+        on a.id=c.album_id
+        limit #{start},#{rows}
+    </select>
+    <!--查询专辑的个数-->
+    <select id="quertPage" resultType="Long">
+        select count(id) from album
+    </select>
+    <!--增加专辑-->
+    <insert id="insert">
+        insert into album values(#{id},#{title},#{publishDate},#{count},#{author},#{coverImg},#{broadCast},#{star},#{brief})
+    </insert>
+    <!--查询单张专辑表-->
+    <select id="queryAll" resultType="Album">
+        select id,title,publishDate,count,author,coverImg,broadCast,star,brief from album
+    </select>
+    <!--根据id查询专辑 -->
+    <select id="queryById" resultType="Album">
+        select id,title,publishDate,count,author,coverImg,broadCast,star,brief from album where id=#{id}
+    </select>
+    <!--修改专辑（专辑的集数）-->
+    <update id="update">
+        update album set title=#{title},publishDate=#{publishDate},count=#{count},author=#{author},coverImg=#{coverImg},broadCast=#{broadCast},star=#{star},brief=#{brief} where id=#{id}
+    </update>
+</mapper>
